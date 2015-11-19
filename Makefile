@@ -48,7 +48,7 @@
 MKDIR=mkdir
 CP=cp
 CCADMIN=CCadmin
-CFLAGS=-w
+CFLAGS= -w
 
 # build
 build: .build-post

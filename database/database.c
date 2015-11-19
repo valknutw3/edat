@@ -133,19 +133,21 @@ database_t* database_open(char* name) {
         free(db);
         return NULL;
     }
-
+										printf("%d\n",1);
     /* tables */
     fread(&(db->ntables), sizeof (int), 1, f);
     db->table_names = malloc(MAX_TABLES * sizeof (char*));
     db->tables = malloc(MAX_TABLES * sizeof (table_t*));
+										printf("%d\n",2);
     for (i = 0; i < db->ntables; i++) {
         db->table_names[i] = calloc(MAX_LONG_NAME, sizeof (char));
         fread(db->table_names[i], sizeof (char), MAX_LONG_NAME, f);
         table_path = get_file_path(db->path, db->table_names[i], ".table");
+										printf("%d\n",21);
         db->tables[i] = table_open(table_path);
         free(table_path);
     }
-
+										printf("%d\n",3);
     /* indexes */
     fread(&(db->nindexes), sizeof (int), 1, f);
     db->index_names = malloc(MAX_INDEXES * sizeof (char*));
@@ -173,7 +175,8 @@ database_t* database_open(char* name) {
         }
     }
     fclose(f);
-
+printf("%d\n",1);
+fflush(stdout);
     return db;
 }
 
@@ -220,7 +223,7 @@ void database_close(database_t* db) {
 /* adds a table to the database */
 int database_add_table(database_t* db, char* table_name, int ncols, type_t* types) {
     char* table_path;
-    
+
     table_path = get_file_path(db->path, table_name, ".table");
     table_create(table_path, ncols, types);
     free(table_path);
@@ -235,6 +238,8 @@ int database_add_table(database_t* db, char* table_name, int ncols, type_t* type
     db->table_cols[db->ntables] = malloc(MAX_INDEXES * sizeof (int));
 
     db->ntables++;
+										/*printf("%d\n",db->ntables);
+										printf("%s\n",db->table_names[db->ntables-1]);*/
 
     return 0;
 }
@@ -242,10 +247,9 @@ int database_add_table(database_t* db, char* table_name, int ncols, type_t* type
 /* gets the table structure by name */
 table_t* database_get_table(database_t* db, char* table_name) {
     int i;
-	printf("%d\n",db->ntables);
+
     for (i = 0; i < db->ntables; i++) {
-		/*printf("%s\n",table_name);
-		printf("%s\n",db->table_names[i]);*/
+		
 			
         if (strcmp(table_name, db->table_names[i]) == 0) {
 			 
@@ -366,7 +370,7 @@ int database_copy(database_t* db, char* table_name, FILE* file) {
     index_t* index;
     int key;
     long pos;
-printf("1\n");
+
     table = database_get_table(db, table_name);
 
     types = table_types(table);
@@ -374,7 +378,7 @@ printf("1\n");
 
     row = malloc(sizeof (void*) * table_ncols(table));
     c = 0;
-printf("1\n");
+										printf("8\n");
     while (fgets(line, MAX_LEN_ROW, file) != NULL) {
         char* eol;
         /* lines starting with '#' are ignored */
@@ -418,6 +422,7 @@ printf("1\n");
     }
 
     free(row);
-
+										
+										
     return c;
 }

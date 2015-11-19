@@ -13,6 +13,7 @@ struct table_ {
 void table_create(char* path, int ncols, type_t* types) {
 	if(!path || !types)
 		return;
+
 	FILE *pf;
 	int i;
 
@@ -20,11 +21,12 @@ void table_create(char* path, int ncols, type_t* types) {
 	if(!pf)
 		return;
 
-	fwrite(&ncols, 1, sizeof(int), pf);
+	fwrite(&ncols,sizeof(int), 1, pf);
 	for(i=0; i<ncols; i++)
-		fwrite(types+i, 1, sizeof(type_t), pf);
+		fwrite(types+i, sizeof(type_t),1, pf);
 
 	fclose(pf);
+
 	return;
 }
 
@@ -33,19 +35,27 @@ table_t* table_open(char* path) {	/*we keep the file open until the end, so the 
 	table_t *  t;
 	if(!path)
 		return NULL;    	
-
-	FILE *pf = fopen(path, "r+");
+										printf("%d\n",221);
+	FILE *pf = fopen(path, "r+");						printf("%s\n", path);
 	if(!pf)
 		return NULL;
+	
 	t= (table_t *)malloc(sizeof(table_t));
-	fread(&(t->col_no), 1, sizeof(int), t->pf);
+	t->pf=pf;
+	pf=NULL;									printf("%d\n",2211);
+										printf("1: %d\n",t->col_no);
+	fread(&(t->col_no), sizeof(int), 1, t->pf);
+										printf("2: %d\n",t->col_no);
+										fflush(stdout);
 	t->types = (type_t *)malloc(t->col_no*sizeof(type_t));
 	if(!t->types)
 		return NULL;
-
+										printf("%d\n",222);
 	for(i=0;i<t->col_no;i++){
-		fread(t->types+i, 1, sizeof(type_t), pf);		
+		fread(t->types+i, sizeof(type_t),1, t->pf);			
 	}
+										printf("%d\n",222);
+										fflush(stdout);
 	return t;
 }
 
@@ -89,7 +99,7 @@ record_t* table_read_record(table_t* table, long pos) {
 	if(fread(&len, sizeof(int), 1, table->pf) < 1)
 		return NULL;
 	buf=(char*)malloc(len*sizeof(char));
-	fread(buf, len, sizeof(char), table->pf);
+	fread(buf,  sizeof(char),len, table->pf);
 	
 	values= (void**) malloc (table->col_no*sizeof(void *));
 	for(i=0; i<table->col_no ;i++){
@@ -101,16 +111,16 @@ record_t* table_read_record(table_t* table, long pos) {
 
 void table_insert_record(table_t* table, void** values) {
    	int i, len;
-printf("1\n");
+										printf("1\n");
 	for(i=0, len=0; i<table->col_no; i++)
 		len+=value_length(table->types[i], values[i]);
 
 	fseek(table->pf, 0L, SEEK_END);
-	fwrite(&len, 1, sizeof(int), table->pf);
+	fwrite(&len, sizeof(int), 1, table->pf);				/*May need len as first parameter*/
 	
 	for(i=0;i<table->col_no;i++)
-		fwrite(values[i], 1, value_length(table->types[i], values[i]), table->pf);
-printf("1\n");
+		fwrite(values[i], value_length(table->types[i], values[i]), 1, table->pf);   /*May need &values[i] as first parameter*/
+										printf("11\n");
 	return;
 }
 

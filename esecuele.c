@@ -110,7 +110,6 @@ void insert(char* db_name) {
 
             /* the input file is opened to be read and copied to the assigned table */
             f = fopen(input, "r");
-printf("1\n");
             nrows = database_copy(db, table_name, f);
             fclose(f);
             printf("(%d rows inserted)", nrows);
