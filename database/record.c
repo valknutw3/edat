@@ -24,7 +24,8 @@ long record_next(record_t* record) {
 
 void record_free(record_t* record) {
 	int i;
-	for (i=0;i<record->ncols;i++) free(record->values[i]);
+	if (!record) return;
+	free(record->values[0]);
 	free(record->values);
 	free(record);
 	return;

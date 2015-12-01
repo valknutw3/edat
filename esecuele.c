@@ -151,14 +151,17 @@ void query(char* db_name) {
 
         /* the operation is parsed to create an operation */
         operation = parser_operation(statement, db);
+
         if (operation != NULL) {
             /* if the operation is valid */
             types = operation_types(operation);
             ncols = operation_ncols(operation);
             nrows = 0;
+
             /* for every result of the operation*/
             while (operation_next(operation)) {
                 /* the values are printed */
+
                 nrows++;
                 for (i = 0; i < ncols; i++) {
                     print_value(stdout, types[i], operation_get(i, operation));

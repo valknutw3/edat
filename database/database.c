@@ -133,21 +133,21 @@ database_t* database_open(char* name) {
         free(db);
         return NULL;
     }
-										printf("%d\n",1);
+										
     /* tables */
     fread(&(db->ntables), sizeof (int), 1, f);
     db->table_names = malloc(MAX_TABLES * sizeof (char*));
     db->tables = malloc(MAX_TABLES * sizeof (table_t*));
-										printf("%d\n",2);
+										
     for (i = 0; i < db->ntables; i++) {
         db->table_names[i] = calloc(MAX_LONG_NAME, sizeof (char));
         fread(db->table_names[i], sizeof (char), MAX_LONG_NAME, f);
         table_path = get_file_path(db->path, db->table_names[i], ".table");
-										printf("%d\n",21);
+										
         db->tables[i] = table_open(table_path);
         free(table_path);
     }
-										printf("%d\n",3);
+										
     /* indexes */
     fread(&(db->nindexes), sizeof (int), 1, f);
     db->index_names = malloc(MAX_INDEXES * sizeof (char*));
@@ -378,7 +378,7 @@ int database_copy(database_t* db, char* table_name, FILE* file) {
 
     row = malloc(sizeof (void*) * table_ncols(table));
     c = 0;
-										printf("8\n");
+										
     while (fgets(line, MAX_LEN_ROW, file) != NULL) {
         char* eol;
         /* lines starting with '#' are ignored */

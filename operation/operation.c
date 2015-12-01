@@ -14,6 +14,7 @@ operation_reset(operation_t* operation) {
 
 int
 operation_next(operation_t* operation) {
+
     return operation->next(operation->args);
 }
 

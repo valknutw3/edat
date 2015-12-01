@@ -211,8 +211,11 @@ operation_t* parser_operation(char* statement, database_t* db) {
     strcpy(copy, statement);
 
     stack = stack_create(MAX_TOKENS);
+
     token = tokenizer(copy);
+if (token == NULL) printf("NULL TOKEN\n");
     ret = 0;
+
     while (token != NULL) {
         ret = process_token(token, stack, db);
         if (ret != 0) {
@@ -226,6 +229,7 @@ operation_t* parser_operation(char* statement, database_t* db) {
         fprintf(stderr, "Malformed statement\n");
         operation = NULL;
     } else {
+
         operation = stack_pop(stack);
     }
 
