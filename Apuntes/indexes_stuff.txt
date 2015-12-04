@@ -1,0 +1,61 @@
+
+INDEXES NOTES.
+About ordering indexes files.
+
+We must order the keys in the index file.
+
+Problem: Order a gigantic file that doesnt  fit in memory
+Solution: MergeSort works when the file does not fit in memory (QS doesnt as
+	it needs to load everything into memory)
+
+	KIND OF(its not just MG). lets say we have a 10 GB file to order, and an available 		memory 
+	of 1 GB. We order the first GB (with the algorithm we want, not MS), then
+	the rest one by one. Finally we merge all of them together.
+
+	Not sure, but apparently we merge more than one table at the same time.
+
+	In order to merge the 10 tables together, we divide our 1 Gb memory in 10 
+	buffers and store 100 MB of each table these partitions. We merge them but
+	we dont write them  on disk as it would take forever(writing on disk takes
+	a lot of time). We have another buffer where we store the partial result,
+	when this  buffer is full we write it on disk and continue until we finish.
+
+EXAMPLE. 
+	tp=10 ms
+	600 rpm
+	100 sect/track
+	2k bytes/sector
+	
+
+	First we read 1 Gb, we order it, then write it to disk, (x10)
+	Then we merge. This means every 1Gb of the file will go through its 
+		100 MB buffer, so we will do 10 reads per buffer, this is 100 reads
+		in total.
+	As we merge, we are writing the result, how many times? the size of the 
+		file divided between the size of  the buffer we are  using to store the
+		result. This is 10GB / 50 MB = 200 times -> 200 writes.
+
+	Adding up: 	first read 	 10
+			first write 	 10
+			read to buffer	100
+			write result	200
+				Adds up to -> 320 * 10 ms = 3.2 seconds 
+			
+			first read time: (10GB) 10GB/(100 * 2)KB= 50000 rotations
+				50000 rot * 10ms per rotation(=6000rpm) = 500s
+			first  time write: same operations -> 500s
+			second read -> 500s
+			second write -> 500s
+	 
+			2000s + 3.2 =2003.2 s
+
+	Conclusion: this disk sucks.
+
+
+	Eventhough its not very well illustrated in this example, the location time
+	normally predomintaes over the read/write time.
+	The number  of positioning is O(N**2)
+	The write read time is linear O(N) -> this only depends on the disk and the size of 			file.
+
+
+	We dont take into account the algorithm commputing time.
