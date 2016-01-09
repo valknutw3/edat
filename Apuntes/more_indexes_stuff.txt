@@ -1,0 +1,16 @@
+First we create a new index that has the primary key and the position of the tuple
+	obviously we order this index by the primary key
+
+Then we create an index for each one of the columns, atributes of the realtion
+	and again we order them. This way we will have quick access  to all tuples
+	when searching by any of the atributes.
+	This indexes have the primary key on one column and the corresponding atr
+	on the other.
+
+
+Insertion is pretty intuitive, we just insert stuff, done.
+When we delete we take away the tuple  from the db and then we ONLY MODIFY THE FIRST
+	INDEX, we assign the deleted record to null and thats it. We will leave data
+	about the removed tuple on the other records
+R = {ssn, name, age, city}
+see pdf.

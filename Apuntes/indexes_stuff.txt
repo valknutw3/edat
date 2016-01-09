@@ -8,7 +8,7 @@ Problem: Order a gigantic file that doesnt  fit in memory
 Solution: MergeSort works when the file does not fit in memory (QS doesnt as
 	it needs to load everything into memory)
 
-	KIND OF(its not just MG). lets say we have a 10 GB file to order, and an available 		memory 
+	KIND OF(its not just MG). lets say we have a 10 GB file to order, and an available memory 
 	of 1 GB. We order the first GB (with the algorithm we want, not MS), then
 	the rest one by one. Finally we merge all of them together.
 
@@ -22,7 +22,7 @@ Solution: MergeSort works when the file does not fit in memory (QS doesnt as
 
 EXAMPLE. 
 	tp=10 ms
-	600 rpm
+	6000 rpm
 	100 sect/track
 	2k bytes/sector
 	
@@ -55,7 +55,7 @@ EXAMPLE.
 	Eventhough its not very well illustrated in this example, the location time
 	normally predomintaes over the read/write time.
 	The number  of positioning is O(N**2)
-	The write read time is linear O(N) -> this only depends on the disk and the size of 			file.
+	The write read time is linear O(N) -> this only depends on the disk and the size of file.
 
 
 	We dont take into account the algorithm commputing time.
